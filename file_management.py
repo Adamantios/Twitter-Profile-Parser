@@ -1,7 +1,5 @@
 import json
 
-import unicodecsv
-
 
 class FileManagement:
     """Makes all the appropriate management of the files."""
