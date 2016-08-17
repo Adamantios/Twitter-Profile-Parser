@@ -11,6 +11,7 @@ from file_management import FileManagement
 # noinspection SpellCheckingInspection
 def parse_arguments():
     parser = ArgumentParser(description='Get specific user data from twitter.')
+
     parser.add_argument('-ck', '--consumerkey', type=str,
                         required=True, dest='consumer_key',
                         help='The consumer key for the authentication.')
@@ -26,6 +27,10 @@ def parse_arguments():
     parser.add_argument('-f', '--file', type=str,
                         required=True, dest='filename',
                         help='path to the file which contains the twitter usernames.')
+    parser.add_argument('-s', '--statuses', type=int,
+                        dest='statuses', default=100,
+                        help='The number of the most recent tweets to fetch for each user.'
+                             'The default value is 100.')
     parser.add_argument('-q', '--querysize', type=int,
                         dest='max_query_size', default=180,
                         help='The number of queries to be executed before sleeping for some minutes.'
@@ -50,12 +55,16 @@ def chunks(data, max_chunk_size):
 
 
 def get_specific_user_data(user):
+    statuses = api.user_timeline(user.screen_name, count=args.statuses)
+    tweets = list(status.text for status in statuses)
+
     return {'user_followers': user.followers_count,
             'user_listed': user.listed_count,
             'user_verified': user.verified,
             'user_statuses': user.statuses_count,
             'user_friends': user.friends_count,
-            'user_favs': user.favourites_count}
+            'user_favs': user.favourites_count,
+            'user_tweets': tweets}
 
 
 def create_results_folder():
