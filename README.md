@@ -7,8 +7,9 @@ The twitter profile parser gets all the required twitter authentication keys as 
 and a csv or line separated file containing the twitter screen names of the users
 for whom we want to download the specific data.
 
-###NOTE:
-In order to change the downloaded data, just change the `get_specific_user_data(user)` function.
+###NOTES:
+-In order to change the downloaded data, just change the `get_specific_user_data(user)` function.
+-If a user from the input file does not exist, shows a message specifying the wrong username converted in lower case.
 
 ##Requirements
 tweepy is required.
@@ -57,12 +58,13 @@ optional arguments:
   ```
 
 ##Results
-Creates a `json` file with all the downloaded users' data in a folder *results*.
-If something goes wrong, creates a file with the partly downloaded data.
+Creates `json` files with all the downloaded users' data in a folder *results*.
+If a user from the input file does not exist, shows a message specifying the wrong username converted in lower case.
 
 ##Example
 ###users.txt file contents:
 BarackObama
+ThisIsHereInOrderToDemonstrateWhatHappensIfANameDoesntExist
 YouTube
 twitter
 cnnbrk
@@ -72,96 +74,140 @@ shakira
 ###Executed command:
 twitter_profile_parser.py -ck xxx -cs xxx -at xxx -ats xxx -f input/users.txt -s 5
 
-###Json Result File Contents:
+###Console output:
+```
+Fetching 6 users out of 7.
+1: The downloaded profile data have been written in 'BarackObama.json', in 'results' folder.
+2: The downloaded profile data have been written in 'YouTube.json', in 'results' folder.
+3: The downloaded profile data have been written in 'twitter.json', in 'results' folder.
+4: The downloaded profile data have been written in 'cnnbrk.json', in 'results' folder.
+5: The downloaded profile data have been written in 'instagram.json', in 'results' folder.
+6: The downloaded profile data have been written in 'shakira.json', in 'results' folder.
+
+The following user(s) do not exist:
+['thisishereinordertodemonstratewhathappensifanamedoesntexist']
+
+NOTE: The non existing names shown, have been converted to lowercase!
+The searching process is case insensitive, so you can safely remove them without trying to capitalise certain letters and use them again!
+
+Process finished with exit code 0
+```
+
+###Json Result Files' Contents:
+```
+{
+  "BarackObama": {
+    "user_listed": 215436,
+    "user_followers": 77150422,
+    "user_favs": 10,
+    "user_statuses": 15247,
+    "user_friends": 634455,
+    "user_tweets": [
+      "Senate leaders have 32 days before their next recess to give Judge Garland a hearing and a vote. Call them out now: https://t.co/IV1AGOEDag",
+      "The Paris Climate Agreement is a big deal in the fight against climate change\u2014and now, a big step closer to reality. https://t.co/5vd6n0BFgG",
+      "The United States is leading the way in the fight to #ActOnClimate. https://t.co/vkUMjg6XKc",
+      "Conservation not only protects diverse lands and species, it's also an important part of battling climate change. https://t.co/gjvhHNPFKL",
+      "\"When we protect our lands, it helps us protect the climate for the future.\" \u2014President Obama #ActOnClimate https://t.co/qdoCgYPQom"
+    ],
+    "user_verified": true
+  }
+}
+```
+
+```
+{
+  "cnnbrk": {
+    "user_listed": 176242,
+    "user_followers": 41822343,
+    "user_favs": 18,
+    "user_statuses": 50974,
+    "user_friends": 119,
+    "user_tweets": [
+      "RT @CNNent: Donald Trump's media blacklist is officially over as of Thursday. https://t.co/tXpoQ7lPXM by @brianstelter https://t.co/VnRgV9u\u2026",
+      "RT @CNNMoney: U.S. stocks start with small losses. Dow off 25 points. Chipotle rises 5%, a day after Bill Ackman buys big stake. https://t.\u2026",
+      "RT @CNNMoney: .@Starbucks CEO Howard Schultz endorses @HillaryClinton during CNNMoney Facebook Live https://t.co/np01zPsLjq https://t.co/SM\u2026",
+      "Joe Hosteen Kellwood, one of the Navajo code talkers during World War II, has died at age 95. https://t.co/AiMKpFjdxO",
+      "4 dead after criminals downed an aircraft in southwestern Mexico, state governor says https://t.co/hQBcGgBHGr https://t.co/pJKx1PD2v4"
+    ],
+    "user_verified": true
+  }
+}
+```
+
 ```
 {
   "instagram": {
-    "user_listed": 33065,
-    "user_followers": 40560857,
+    "user_listed": 33137,
+    "user_followers": 40475184,
     "user_favs": 101,
-    "user_statuses": 9066,
+    "user_statuses": 9263,
     "user_friends": 4,
     "user_tweets": [
-      "A symbiotic submission to last weekend\u2019s hashtag project, #WHPsymmetry https://t.co/GN4CAYuHmi",
-      "RT @Terr: thank you @tavitulle for taking over our Instagram Story today i am literally obsessed with your Teen Vogue cover https://t.co/em\u2026",
-      "RT @umamiburger: Follow us on @instagram to get the first look at our exclusive burger in Pasadena! #instagramstories https://t.co/GB2Onx2O\u2026",
-      "RT @alternahaircare: Check out our Instagram story for a Q &amp; A with @KatieHolmes212! https://t.co/EBjW65pqhT https://t.co/xBbQ7QkZv4",
-      "RT @tavitulle: I took over @TeenVogue's instagram story today \ud83d\ude08 https://t.co/8DbJtksTDd"
+      "A foggy jog through San Francisco\u2019s Mount Davidson Park https://t.co/EFOD7ZS3yN",
+      "#DailyFluff\nhttps://t.co/OgFjORnXzr \ud83d\udc3e https://t.co/sSuaTEbDgj",
+      "A burst of energy and light erupts in a forest clearing \ud83d\udca5 #WHPwilderness https://t.co/owO0wbGqy8",
+      "Featured submissions from this weekend\u2019s hashtag project: #WHPwilderness https://t.co/5oUkSgmSZb https://t.co/w0geEf5RRk",
+      "RT @InstagramMusic: .@kanyewest on an ultralight beam #weekendmusic https://t.co/0Xbx71DGgM"
     ],
     "user_verified": true
-  },
-  "YouTube": {
-    "user_listed": 80264,
-    "user_followers": 63532620,
-    "user_favs": 1375,
-    "user_statuses": 17258,
-    "user_friends": 933,
-    "user_tweets": [
-      "When you look in the mirror and realize you've turned into a terrifying squid. https://t.co/KPf7HgvXMT #squidgoals https://t.co/zhBLPzejhB",
-      "@Iam_Hyem Now that is the boat to be on.",
-      "@KickinMajorFlav So ready. Especially in that hat. #FOTLD",
-      "@dddddanniell It'll totally help. Especially the hat. Definitely the hat. #FOTLD",
-      "@kayla_dishner YES. Did you like what you found inside? #FOTLD"
-    ],
-    "user_verified": true
-  },
-  "twitter": {
-    "user_listed": 90303,
-    "user_followers": 56328152,
-    "user_favs": 2015,
-    "user_statuses": 3081,
-    "user_friends": 145,
-    "user_tweets": [
-      "Close out #TravelTuesday with a trip to Greece to see Meteora's monasteries in the sky: https://t.co/lKxxygnvx2 https://t.co/pGAT3L2wnk",
-      "Pass the remote! After reading your #7FavTVShows, we've got a lot to watch. \ud83d\udcfa https://t.co/sS6lmvjTCH https://t.co/NtFojoqWUW",
-      "Your favorite events, right in your timeline! Follow a Moment for live updates from #Rio2016 https://t.co/mBvPYxMt1l https://t.co/HvlEeAaGnn",
-      "See what's happening \u2014 politics on Twitter.\nhttps://t.co/3KWjYe3jb9",
-      "First-time champions, repeat winners, and lightning on the track \u2014 see what happened this weekend at #Rio2016.\nhttps://t.co/x4sMTYTyyX"
-    ],
-    "user_verified": true
-  },
-  "cnnbrk": {
-    "user_listed": 175875,
-    "user_followers": 41305587,
-    "user_favs": 18,
-    "user_statuses": 50676,
-    "user_friends": 119,
-    "user_tweets": [
-      "Donald Trump's campaign is undergoing a major staff shakeup, adding two officials to top posts. https://t.co/P3cmmmTG4e",
-      "Malaysian oil tanker carrying about $400K worth of diesel was hijacked, taken to Indonesian waters, authorities say. https://t.co/WtiV55Ud9X",
-      "Jalisco attorney general: Joaquin \u2018El Chapo\u2019 Guzman\u2019s son was among those kidnapped in Puerto Vallarta. https://t.co/riJSJH5cA0",
-      "John McLaughlin, the host of \u2018The McLaughlin Group\u2019 show, dies at 89. https://t.co/AxH1dgs2Pd https://t.co/I6lrxPEFcE",
-      "RT @CNNMoney: Stocks end lower. Dow falls 84 points, Nasdaq off 0.7%. Oil continues to creep upward, comfortably over $46/barrel. https://t\u2026"
-    ],
-    "user_verified": true
-  },
+  }
+}
+```
+
+```
+{
   "shakira": {
-    "user_listed": 102231,
-    "user_followers": 39378392,
-    "user_favs": 398,
-    "user_statuses": 4160,
+    "user_listed": 102195,
+    "user_followers": 39756526,
+    "user_favs": 411,
+    "user_statuses": 4192,
     "user_friends": 183,
     "user_tweets": [
-      "RT @carlosvives: #labicicletakids @clarapablo que espect\u00e1culo te quiero abrazos!!! @shakira \n#Repost @clarapablo\u2026 https://t.co/cA1wWHTNd9",
-      "RT @shakifan2277: @shakira @carlosvives #LaBicicletaKids  Mi bailarin bello\ud83d\udc97 Te amo Shakira https://t.co/D8pWq4W0tC",
-      "\"Shakira Shares Adorable Videos of Kids Dancing to Her Song La Bicicleta\" @enews #LaBicicletaKids ShakHQ   https://t.co/gadgoZ53HL",
-      "Video: @jackiee80 on Instagram #LaBicicletaKids \ud83d\udeb2 ShakHQ @carlosvives https://t.co/wfV6kHFA7T",
-      "RT @Juancabts: @CarlosVives Isa se sabe todas las canciones de @shakira  y por supuesto #LaBicicletaKids no es la excepci\u00f3n.  \ud83d\ude0d https://t.c\u2026"
+      "Gracias a todos por sus  mensajes de cari\u00f1o y buenos deseos para mi papa en su cumple!! Muah! Shak https://t.co/6Roy2R0pUH",
+      "Feliz 85avo cumplea\u00f1os papi!! Shak https://t.co/r7Vw5oPFmh",
+      "Wait, let's hear that again...Shak https://t.co/nYWwrjN0y2",
+      "Video: Fundaci\u00f3n Brindemos Sonrisas on instagram #LaBicicletaKids \ud83d\udeb2 ShakHQ @carlosvives https://t.co/RxJEWW8ThF",
+      "So pleased to report that the #ALASIDBAwards received 1101 proposals from 20 LATAM countries @MorenoBID ShakHQ"
     ],
     "user_verified": true
-  },
-  "BarackObama": {
-    "user_listed": 215412,
-    "user_followers": 76762669,
-    "user_favs": 10,
-    "user_statuses": 15188,
-    "user_friends": 634813,
+  }
+}
+```
+
+```
+{
+  "twitter": {
+    "user_listed": 90395,
+    "user_followers": 56596869,
+    "user_favs": 2059,
+    "user_statuses": 3123,
+    "user_friends": 145,
     "user_tweets": [
-      "RT @WhiteHouse: Here's how today's new actions will spur innovation and promote more efficient vehicles: https://t.co/WoV9454Y4B https://t.\u2026",
-      "We\u2019re taking important steps to help guarantee the basic security of paid family leave. https://t.co/yvRhINmIGA #LeadOnLeave",
-      "Senate leaders must stop obstructing our Supreme Court. Take a stand and show your support. https://t.co/1AaykUkmvn #DoYourJob",
-      "Reminder: It's the Senate's job to fairly consider Supreme Court nominees. #DoYourJob https://t.co/xrkYcRsLNw",
-      "Today, thousands of young DREAMers are able to fully contribute to our communities and our economy. https://t.co/szjWDVYm9X"
+      "This #TravelTuesday, see why Mark Twain once wrote, \"heaven was copied after Mauritius.\"\n\ud83c\udf34 https://t.co/2HJS8xhBqe https://t.co/gjHtHikxfK",
+      "@Nah_shelly Happy birthday, Nashelly! Here's another \ud83c\udf88",
+      "We \ud83d\udc40 you, Jupiter. #JunoMission \nhttps://t.co/YphJMZhTo0",
+      "RT @gov: Tracking #Hermine this Labor Day weekend? Follow this list for live updates: https://t.co/kjRnzsiyO3 #FollowFriday https://t.co/DI\u2026",
+      "Summer's almost over. What's your #FridayFeeling?"
+    ],
+    "user_verified": true
+  }
+}
+```
+
+```
+{
+  "YouTube": {
+    "user_listed": 80356,
+    "user_followers": 63860528,
+    "user_favs": 1382,
+    "user_statuses": 17407,
+    "user_friends": 945,
+    "user_tweets": [
+      "They can make you go back to school, but they\u2019ll never take your style. https://t.co/kRRvw59xfB https://t.co/zqsLvhW1s2",
+      "Always stoked to see YouTubers on TV. Congrats, @SimoneGiertz \ud83d\udc4f \ud83d\udc4f \ud83d\udc4f https://t.co/q0Y4xa09Ui https://t.co/H6i9PhlPdD",
+      "@AmkcccAndy So good! Those eyes are so blue ... so Bunny!",
+      "We\u2019ve seen you again \u2026 over 2 billion times. Congratulations @wizkhalifa and @charlieputh. https://t.co/Fo1aWNjD7w https://t.co/NyvrZXSyzh",
+      "RT @AURORAmusic: Excited for my Fall N. America Tour! Warriors+Weirdos: Get tix at 10am tmrw: PW=WENTTOOFAR https://t.co/Er5kZBrmX1 https:/\u2026"
     ],
     "user_verified": true
   }
