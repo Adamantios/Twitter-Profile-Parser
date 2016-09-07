@@ -15,6 +15,10 @@ class FileManagement:
             for line in f:
                 data.append(line.strip().split(' '))
 
+        if len(data) == 0:
+            print 'The input file is empty!'
+            exit()
+
         return data
 
     @staticmethod
