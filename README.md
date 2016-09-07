@@ -8,7 +8,7 @@ and a csv or line separated file containing the twitter screen names of the user
 for whom we want to download the specific data.
 
 ###NOTES:
--In order to change the downloaded data, just change the `get_specific_user_data(user)` function.
+-In order to change the downloaded data, just change the `get_specific_user_data(user)` function.  
 -If a user from the input file does not exist, shows a message specifying the wrong username converted in lower case.
 
 ##Requirements
