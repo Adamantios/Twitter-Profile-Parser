@@ -1,10 +1,13 @@
 from argparse import ArgumentParser
+from itertools import chain
+from os import makedirs
+from os import path
+from time import sleep
+
 from tweepy import API
 from tweepy import OAuthHandler
-from itertools import chain
-from time import sleep
-from os import path
-from os import makedirs
+from tweepy import TweepError
+
 from file_management import FileManagement
 
 
@@ -72,48 +75,62 @@ def create_results_folder():
         makedirs('results')
 
 
-def create_result_file(results, succeeded=True):
-    if succeeded:
-        create_results_folder()
-        FileManagement.write_data_to_file(results, 'results/downloaded_profiles.json')
-        print 'The downloaded profile data have been written in \'downloaded_profiles.json\'' \
-              ', in \'results\' folder.'
-    else:
-        create_results_folder()
-        FileManagement.write_data_to_file(results, 'results/partially_downloaded_profiles.json')
-        print 'Some data failed to download!' \
-              'The part of the downloaded profile data have been written' \
-              ' in \'partially_downloaded_profiles.json\'' \
-              ', in \'results\' folder.'
+def create_result_file(results, name, counter):
+    create_results_folder()
+    FileManagement.write_data_to_file(results, 'results/' + name + '.json')
+    print str(counter) + ': The downloaded profile data have been written in \'' \
+          + name + '.json\', in \'results\' folder.'
 
 
 def fetch_data():
     need_to_sleep = False
-    users_data = {}
+    user_data = {}
+    user_counter = 0
 
     for chunk in users_chunks:
-        try:
-            if need_to_sleep:
-                print 'Sleeping for ' + str(args.minutes_to_sleep) + ' minute(s)...'
-                sleep(60 * args.minutes_to_sleep)
 
-            chunk = list(chain.from_iterable(chunk))
-            print 'Fetching ' + str(len(chunk)) + ' users.'
+        if need_to_sleep:
+            print 'Sleeping for ' + str(args.minutes_to_sleep) + ' minute(s)...'
+            sleep(60 * args.minutes_to_sleep)
+
+        chunk = list(chain.from_iterable(chunk))
+
+        try:
             users = api.lookup_users(screen_names=chunk)
+            expected = str(len(chunk))
+            found = str(len(users))
+            print 'Fetching ' + found + ' users out of ' + expected + '.'
+            chunk = list(set(i.lower() for i in chunk))
 
             for u in users:
-                users_data[u.screen_name] = get_specific_user_data(u)
+                user_counter += 1
+                chunk.remove(str(u.screen_name).lower())
+                user_data[u.screen_name] = get_specific_user_data(u)
+                create_result_file(user_data, u.screen_name, user_counter)
+                user_data.clear()
+
+            if found < expected:
+                print '\nThe following user(s) do not exist:\n' + str(chunk)
+                print '\nNOTE: The non existing names shown, have been converted to lowercase!\n' \
+                      'The searching process is case insensitive, ' \
+                      'so you can safely remove them without trying to capitalise certain letters ' \
+                      'and use them again!'
 
             need_to_sleep = True
-        except StopIteration:
-            create_result_file(users_data, False)
 
-    create_result_file(users_data)
+        except TweepError:
+            print 'The following user(s) do not exist:\n' + str(chunk)
+
+
+def main():
+    # noinspection PyGlobalUndefined
+    global args, api, users_chunks
+    args = parse_arguments()
+    api = get_twitter_api()
+    usernames = FileManagement.load_file(args.filename)
+    users_chunks = chunks(usernames, args.max_query_size)
+    fetch_data()
 
 
 if __name__ == "__main__":
-    args = parse_arguments()
-    api = get_twitter_api()
-    usernames = [username for username in FileManagement.load_file(args.filename)]
-    users_chunks = chunks(usernames, args.max_query_size)
-    fetch_data()
+    main()
