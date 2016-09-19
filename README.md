@@ -3,38 +3,23 @@ A twitter profile parser, which returns specific data of twitter users.
 Written in Python 2.7
 
 ##Input
-The twitter profile parser gets all the required twitter authentication keys as input
-and a csv or line separated file containing the twitter screen names of the users
+The twitter profile parser takes as an input a csv or line separated file containing the twitter screen names of the users
 for whom we want to download the specific data.
 
 ###NOTES:
 -In order to change the downloaded data, just change the `get_specific_user_data(user)` function.  
--If a user from the input file does not exist, shows a message specifying the wrong username converted in lower case.
+-After every chunk downloaded, if any user could not be fetched, shows a message specifying the username(s) converted in lower case.
 
 ##Requirements
 tweepy is required.
 
 ##Usage
 ```
-twitter_profile_parser.py [-h] -ck CONSUMER_KEY -cs CONSUMER_SECRET 
-                                -at ACCESS_TOKEN -ats ACCESS_TOKEN_SECRET 
-                                -f FILENAME 
+twitter_profile_parser.py [-h]  -f FILENAME 
                                 [-s STATUSES] [-q MAX_QUERY_SIZE]
                                 [-t MINUTES_TO_SLEEP]
 
 required arguments:
-  -ck CONSUMER_KEY, --consumerkey CONSUMER_KEY
-                        The consumer key for the authentication.
-                        
-  -cs CONSUMER_SECRET, --consumersecret CONSUMER_SECRET
-                        The consumer secret for the authentication.
-                        
-  -at ACCESS_TOKEN, --accesstoken ACCESS_TOKEN
-                        The access token for the authentication.
-                        
-  -ats ACCESS_TOKEN_SECRET, --accesstokensecret ACCESS_TOKEN_SECRET
-                        The access token secret for the authentication.
-                        
   -f FILENAME, --file FILENAME
                         path to the file which contains the twitter usernames.
 
@@ -58,8 +43,9 @@ optional arguments:
   ```
 
 ##Results
-Creates `json` files with all the downloaded users' data in a folder *results*.
-If a user from the input file does not exist, shows a message specifying the wrong username converted in lower case.
+Creates `json` files with all the downloaded users' data in a folder *results*.  
+After every chunk downloaded, if any user could not be fetched, shows a message specifying the username(s) converted in lower case.  
+If any user's tweets could not be fetched, shows warning message.
 
 ##Example
 ###users.txt file contents:
@@ -72,25 +58,34 @@ instagram
 shakira
 
 ###Executed command:
-twitter_profile_parser.py -ck xxx -cs xxx -at xxx -ats xxx -f input/users.txt -s 5
+twitter_profile_parser.py -f input/users.txt -s 5
 
-###Console output:
+###Console output(colorful in Linux):
 ```
-Fetching 6 users out of 7.
-1: The downloaded profile data have been written in 'BarackObama.json', in 'results' folder.
-2: The downloaded profile data have been written in 'YouTube.json', in 'results' folder.
-3: The downloaded profile data have been written in 'twitter.json', in 'results' folder.
-4: The downloaded profile data have been written in 'cnnbrk.json', in 'results' folder.
-5: The downloaded profile data have been written in 'instagram.json', in 'results' folder.
-6: The downloaded profile data have been written in 'shakira.json', in 'results' folder.
+Breaking users in 1 chunks.
+Trying to fetch 7 users...
 
-The following user(s) do not exist:
+1: User BarackObama was fetched!
+[{u'message': u'User not found.', u'code': 50}]
+2: User with screen name: ThisIsHereInOrderToDemonstrateWhatHappensIfANameDoesntExist could not be fetched!
+3: User YouTube was fetched!
+4: User twitter was fetched!
+5: User cnnbrk was fetched!
+6: User instagram was fetched!
+7: User shakira was fetched!
+
+Fetched 6 users out of 7.
+
+1: Profile data for user BarackObama have been written in 'BarackObama.json', in 'results' folder.
+2: Profile data for user YouTube have been written in 'YouTube.json', in 'results' folder.
+3: Profile data for user twitter have been written in 'twitter.json', in 'results' folder.
+4: Profile data for user cnnbrk have been written in 'cnnbrk.json', in 'results' folder.
+5: Profile data for user instagram have been written in 'instagram.json', in 'results' folder.
+6: Profile data for user shakira have been written in 'shakira.json', in 'results' folder.
+The following user(s) could not be fetched:
 ['thisishereinordertodemonstratewhathappensifanamedoesntexist']
-
-NOTE: The non existing names shown, have been converted to lowercase!
-The searching process is case insensitive, so you can safely remove them without trying to capitalise certain letters and use them again!
-
-Process finished with exit code 0
+The non fetched names shown, have been converted to lowercase!
+The searching process is case insensitive!
 ```
 
 ###Json Result Files' Contents:
