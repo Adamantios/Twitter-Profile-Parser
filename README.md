@@ -2,18 +2,18 @@
 A twitter profile parser, which returns specific data of twitter users.
 Written in Python 2.7
 
-##Input
+## Input
 The twitter profile parser takes as an input a csv or line separated file containing the twitter screen names of the users
 for whom we want to download the specific data.
 
-###NOTES:
+### NOTES:
 -In order to change the downloaded data, just change the `get_specific_user_data(user)` function.  
 -After every chunk downloaded, if any user could not be fetched, shows a message specifying the username(s) converted in lower case.
 
-##Requirements
+## Requirements
 tweepy is required.
 
-##Usage
+## Usage
 ```
 twitter_profile_parser.py [-h]  -f FILENAME 
                                 [-s STATUSES] [-q MAX_QUERY_SIZE]
@@ -42,13 +42,13 @@ optional arguments:
                         time of waiting between the requests.
   ```
 
-##Results
+## Results
 Creates `json` files with all the downloaded users' data in a folder *results*.  
 After every chunk downloaded, if any user could not be fetched, shows a message specifying the username(s) converted in lower case.  
 If any user's tweets could not be fetched, shows warning message.
 
-##Example
-###users.txt file contents:
+## Example
+### users.txt file contents:
 BarackObama
 ThisIsHereInOrderToDemonstrateWhatHappensIfANameDoesntExist
 YouTube
@@ -57,10 +57,10 @@ cnnbrk
 instagram
 shakira
 
-###Executed command:
+### Executed command:
 twitter_profile_parser.py -f input/users.txt -s 5
 
-###Console output(colorful in Linux):
+### Console output(colorful in Linux):
 ```
 Breaking users in 1 chunks.
 Trying to fetch 7 users...
@@ -88,7 +88,7 @@ The non fetched names shown, have been converted to lowercase!
 The searching process is case insensitive!
 ```
 
-###Json Result Files' Contents:
+### Json Result Files' Contents:
 ```
 {
   "BarackObama": {
