@@ -7,8 +7,8 @@ The twitter profile parser takes as an input a csv or line separated file contai
 for whom we want to download the specific data.
 
 ### NOTES:
--In order to change the downloaded data, just change the `get_specific_user_data(user)` function.  
--After every chunk downloaded, if any user could not be fetched, shows a message specifying the username(s) converted in lower case.
+* In order to change the downloaded data, just change the `get_specific_user_data(user)` function.  
+* After every chunk downloaded, if any user could not be fetched, shows a message specifying the username(s) converted in lower case.
 
 ## Requirements
 tweepy is required.
